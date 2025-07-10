@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>FORM 26 Generator</title>
+
+  <!-- ✅ Bootstrap CDN -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 11pt;
+      padding: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      margin-bottom: 20px;
+    }
+
+    th, td {
+      border: 1px solid #000;
+      padding: 8px;
+      text-align: left;
+    }
+
+    .signature-box {
+      border-bottom: 1px solid black;
+      width: 300px;
+      margin-left: auto;
+      margin-bottom: 4px;
+    }
+
+    .signature-label {
+      padding: 5px 20px;
+      width: 300px;
+      margin-left: auto;
+      text-align: center;
+    }
+
+    .signature-section {
+      page-break-inside: avoid;
+      margin-top: 40px;
+      text-align: right;
+    }
+
+    @media print {
+  .signature-section {
+    page-break-before: always;
+    margin-top: 1in; /* 👈 gives spacing from top of new page */
+    page-break-inside: avoid;
+  }
+}
+    /* ✅ Print formatting */
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+
+      #printable, #printable * {
+        visibility: visible;
+      }
+
+      #printable {
+        position: absolute;
+        left: 0;
+        top: 0;
+        padding: 0.32in 0.8in; /* ✅ Top/bottom and side padding */
+      }
+
+      @page {
+        margin: 0; /* Remove default margins */
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2 class="mb-4 fw-bold text-center my-3">FORM 26 Auto-Filler</h2>
+
+    <form id="inputSection" class="row g-3 mb-4">
+      <div class="col-12">
+        <label for="patentTitle" class="form-label">Patent Title:</label>
+        <textarea id="patentTitle" class="form-control"></textarea>
+      </div>
+
+      <!-- Inventor 1 -->
+      <div class="col-md-6">
+        <label class="form-label">Inventor 1 Name:</label>
+        <input type="text" id="inv1Name" class="form-control" />
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Country Name:</label>
+        <select id="country1" class="form-select">
+          <option value="INDIA">India</option>
+        </select>
+      </div>
+      <div class="col-12">
+        <label class="form-label">Inventor 1 Address:</label>
+        <textarea id="inv1Addr" class="form-control"></textarea>
+      </div>
+
+      <!-- Inventor 2 -->
+      <div class="col-md-6">
+        <label class="form-label">Inventor 2 Name (optional):</label>
+        <input type="text" id="inv2Name" class="form-control" />
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Country Name:</label>
+        <select id="country2" class="form-select">
+          <option value="INDIA">India</option>
+        </select>
+      </div>
+      <div class="col-12">
+        <label class="form-label">Inventor 2 Address:</label>
+        <textarea id="inv2Addr" class="form-control"></textarea>
+      </div>
+
+      <!-- Inventor 3 -->
+      <div class="col-md-6">
+        <label class="form-label">Inventor 3 Name (optional):</label>
+        <input type="text" id="inv3Name" class="form-control" />
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Country Name:</label>
+        <select id="country3" class="form-select">
+          <option value="INDIA">India</option>
+        </select>
+      </div>
+      <div class="col-12">
+        <label class="form-label">Inventor 3 Address:</label>
+        <textarea id="inv3Addr" class="form-control"></textarea>
+      </div>
+
+      <div class="col-12">
+        <button type="button" onclick="generateForm()" class="btn btn-primary me-2">Generate Form</button>
+        <button type="button" onclick="window.print()" class="btn btn-secondary">🖨️ Print</button>
+      </div>
+    </form>
+  </div>
+
+  <div id="printable"></div>
+
+  <script>
+    function generateForm() {
+      const inventors = [];
+
+      for (let i = 1; i <= 3; i++) {
+        const name = document.getElementById(`inv${i}Name`).value.trim();
+        const addr = document.getElementById(`inv${i}Addr`).value.trim();
+        const country = document.getElementById(`country${i}`).value.trim();
+
+        if (name !== "") {
+          inventors.push({ name, addr, country });
+        }
+      }
+
+      const patent = document.getElementById("patentTitle").value.trim();
+
+      const tableRows = inventors
+        .map(
+          (inv) =>
+            `<tr><td style="padding: 8px 36px; text-align: left; text-transform: uppercase;">${inv.name}</td><td style="padding: 8px 36px; text-align: left;">${inv.country}</td><td style="padding: 8px 36px; text-align: left;">${inv.addr}</td></tr>`
+        )
+        .join("");
+
+      const signatureBlocks = inventors
+        .map(
+          (inv) => `
+        <div style="margin-bottom: 30px; text-transform: uppercase;">
+          <div class="signature-box"></div>
+          <div class="signature-label"><strong>${inv.name}</strong></div>
+        </div>`
+        )
+        .join("");
+
+      const fullSignatures = `
+        <div class="signature-section">
+          ${signatureBlocks}
+        </div>`;
+
+      document.getElementById("printable").innerHTML = `
+        <div style="font-size: 11pt; line-height: 1.4;">
+          <div style="text-align: center; font-weight: bold; line-height: 1.2; margin-bottom: 10px;">
+            <div>FORM 26</div>
+            <div>THE PATENTS ACT, 1970</div>
+            <div>(39 of 1970)</div>
+            <div>FORM OF AUTHORISATION OF A PATENT AGENT/OR ANY PERSON IN A MATTER OR</div>
+            <div>PROCEEDING UNDER THE ACT</div>
+            <div>[See sections 127 and 132 and rule 135]</div>
+          </div>
+
+          <p style="margin-bottom: 0;">We,</p>
+
+          <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px; font-weight: bold;" border="1">
+            <thead>
+              <tr>
+                <th style="padding: 8px 36px; font-weight: 500; text-align: left; width: 35%;">Name of the Applicant</th>
+                <th style="padding: 8px 36px; font-weight: 500; text-align: left; width: 20%;">Nationality</th>
+                <th style="padding: 8px 36px; font-weight: 500; text-align: left; width: 50%;">Address</th>
+              </tr>
+            </thead>
+            <tbody>${tableRows}</tbody>
+          </table>
+
+          <p style="text-align: justify;">hereby authorize Anand Pandey, registered Patent Agent (IN/PA-4094), an Indian national, of 10/102, IIT Gandhinagar, Palaj, Gandhinagar-382055 India, to act on our behalf in connection with Indian Patent Application titled:</p>
+
+          <p style="font-weight: bold; text-transform: uppercase;">${patent}</p>
+
+          <p style="text-align: justify;">
+            before the Controller of Patents or the Government of India and in all matters and proceedings relating to the patent application including opposition proceedings, filing of divisional applications, patent of addition, renewals thereof, filing of statements of working thereof, amendments thereof or of the application, specification or any other documents filed in respect thereof, restorations thereof, registrations of any license, mortgage, assignment transfer or other interest in respect thereof or change in our name, address or address for service, appointment of a substitute or substitutes, and in general to do all acts or things as the said Agent may deem necessary or expedient and request that all notices, requisitions and communications relating thereto may be sent to such person at the above address unless otherwise specified.
+          </p>
+
+          <p style="text-align: justify;">I hereby revoke all previous authorization, if any made, in respect of the same matter or proceedings.</p>
+          <p style="text-align: justify;">I hereby assent to the action already taken by the said person in the above matter.</p>
+          <p>Dated this the __<sup>th</sup> day of July 2025</p>
+
+          ${fullSignatures}
+
+          <p>To,<br>The Controller of Patents,<br>The Patent Office, <strong>New Delhi/Kolkata/Chennai/Mumbai</strong></p>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>
