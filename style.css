@@ -1,0 +1,82 @@
+
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 11pt;
+      padding: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      margin-bottom: 20px;
+    }
+
+    th,
+    td {
+      border: 1px solid #000;
+      padding: 8px;
+      text-align: left;
+    }
+
+    .signature-box {
+      border-bottom: 1px solid black;
+      width: 300px;
+      margin-left: auto;
+      margin-bottom: 4px;
+    }
+
+    .signature-label {
+      padding: 5px 20px;
+      width: 300px;
+      margin-left: auto;
+      text-align: center;
+    }
+
+    .signature-section {
+      page-break-inside: avoid;
+      margin-top: 40px;
+      text-align: right;
+    }
+
+    @media print {
+      .signature-section {
+        page-break-before: always;
+        margin-top: 1in;
+        page-break-inside: avoid;
+      }
+    }
+
+    /* Print formatting */
+
+    @media print {
+
+      .w-50,
+      .p-3,
+      .m-auto {
+        all: unset !important;
+      }
+
+      body * {
+        visibility: hidden;
+      }
+
+      #printable,
+      #printable * {
+        visibility: visible;
+        max-width: 100%;
+        padding: 0px;
+      }
+
+      #printable {
+        position: absolute;
+        left: 0;
+        top: 0;
+        padding: 0.32in 0.8in;
+      }
+
+      @page {
+        margin: 0;
+    
+      }
+    }
